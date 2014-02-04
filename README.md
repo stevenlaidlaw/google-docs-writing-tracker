@@ -4,6 +4,8 @@
 
 Derived heavily from https://github.com/jamietr1/google-docs-writing-tracker
 
+_**Authors Note** I designed this to be much simpler and give a little extra information than Jamie's script. It doesn't get the file diff, and doesn't keep backups, because I found little use for that. I just wanted the basic stats so I could graph my writing journey easier._
+
 The Google Docs Writing Tracker Lite automates the process of logging how much you write each day. It does four main things:
 
 1. Gets a total word count for the day and logs the word count to a Google Spreadsheet.
