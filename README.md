@@ -1,45 +1,30 @@
-google-docs-writing-tracker
-===========================
+# google-docs-writing-tracker-lite
 
-<strong>Overview</strong>
+## Overview
 
-The Google Docs writing tracker automates the process of logging how much you write each day. It does 3 main things:
+Derived heavily from https://github.com/jamietr1/google-docs-writing-tracker
 
-  1. Gets a total word count for the day and logs the word count to a Google Spreadsheet.
-  2. Generates an HTML file of of what you wrote today, including differences from yesterday.
-  3. Sends the HTML file to an email address (I use my Evernote email for this).
+The Google Docs Writing Tracker Lite automates the process of logging how much you write each day. It does four main things:
 
-The result is a spreadsheet containing the raw numbers, how much you wrote each day, and a daily email showing
-exactly what you wrote each day, what changes you made, what you added and what you deleted from the previous day.
+1. Gets a total word count for the day and logs the word count to a Google Spreadsheet.
+2. Gets total word count for whole project.
+3. Gets consecutive days written.
+4. Sends an email with the above information.
+
+The result is a spreadsheet containing the raw numbers, how much you wrote each day, total word count, and consecutive writing days. Also you get a daily email showing with this information.
 
 The writing tracker depends on a very specific configuration so please be sure to read the setup instructions
 below.
 
-<strong>A note on the (lack of) support</strong>
+## Configuration
 
-Keep in mind that I originally developed this code for me, without thinking others would be using it. If it seems
-cumbersome to setup, sorry! Also, <strong>USE IT AT YOUR OWN RISK</strong>. It works well for me, but I've been using it for
-months and it was designed around my workstyle. People have asked that I make the code available, and I have done
-that, but I have no time to support it. Feel free to email me at feedback [at] jamietoddrubin dot com with questions, but there is no guarantee that I will
-be able to reply, or answer the questions. Again, sorry about this.
-
-<strong>Configuration</strong>
-
-The writing tracker depends on you doing all of your writing within a single folder in Google Docs. Call this
-folder your "Sandbox". Inside your sandbox you should keep all of your working documents. Also inside the 
-Sandbox is a sub-folder called "Earlier" containing earlier versions of your working documents. You must create
-this sub-folder, but the scripts should keep it up-to-date.
-
-As currently designed, you should use the folder names as given above. In the future, I'll make this more
-flexible, but when I designed this, it was originally for me and I didn't really think other people would be
-using it.
+The writing tracker depends on you doing all of your writing within a single folder in Google Docs. you can use whichever foled you like. Inside your folder you should keep all of your working documents.
 
 Finally, the system uses a Google Spreadsheet. You can call this spreadsheet whatever you want. The scripts 
 refer to it by it's file ID as opposed to its name. However, the spreadsheet MUST have a tab nammed "Writing".
-This is where the daily word counts will be recorded. My spreadsheet is called "Writing Data" and I keep it in an
-"Analytics" folder in Google Docs.
+This is where the daily word counts will be recorded.
 
-<strong>Setup</strong>
+## Setup
 
 Please follow these instructions carefully. Getting a step wrong will likely cause the scripts to fail.
 
@@ -47,10 +32,12 @@ I. File System Setup
 
   1. Create a Google Spreadsheet to store your writing data.
 
-      a. Name the first tab in the spreadsheet "Writing"<br />
-      b. Give cell A1 the label "Date"<br />
-      c. Give cell B1 the label "Words"<br />
-      d. Record the file ID of the spreadsheet. You can do this by copying it from the file URL:
+      a. Name the first tab in the spreadsheet "Writing"
+      b. Give cell A1 the label "Date"
+      c. Give cell B1 the label "Words"
+      d. Give cell C1 the label "Total"
+      e. Give cell F1 the label "Consecutive Days"
+      f. Record the file ID of the spreadsheet. You can do this by copying it from the file URL:
       
          If your URL looks like this:
          
@@ -60,9 +47,7 @@ I. File System Setup
          
             0AmEvY6JjICyzHUWEkdivZmxmT18584hY
             
-  2. Create a folder called "Scripts"
-  3. Create a folder called "Sandbox"
-  4. Create a sub-folder in "Sandbox" called "Earlier" 
+  2. Get the folder ID folder of your folder using the same method as above
 
 II. Script Setup
 
@@ -90,20 +75,13 @@ B. Google Doc Writing Tracker script setup:
   5. Copy the code from "diff.gs" (in GitHub) and paste it into the diff.gs file.
   6. Go into the "code.gs" script. There are four values that must be updated:
 
-      var en_add = "<EMAIL ADDRESS>" -- replace with the email address you want the daily writing
-                                        to be sent. (You can use your Evernote email if you want it
-                                        to go to Evernote
+      var en_add = ""               -- replace with the email address you want the daily writing to be sent
 
-      var SANDBOX = "Sandbox";       -- this is the name of your sandbox folder. I recommend using
-                                        this name.
-    
-      var PREV_FOLDER = "Sandbox/Earlier"; -- this is the name of your "Earlier" folder. I recommend
-                                              using this name.
+      var SANDBOX = "";             -- this is the folder ID of your writing folder
 
-      var QS_FILE = "<file Id>";     -- this is the file ID you recorded
-                                        above in step I-1-d
+      var QS_FILE = "";             -- this is the file ID of your spreadsheet
 
-You should have a Google App Script project now, with 2 scripts in it, code.gs and diff.gs.
+You should have a Google App Script project now, with 1 script in it: code.gs.
 
 III. Configuring the Automation
 
@@ -120,13 +98,8 @@ run the script manually. It will work automatically.
 IV. Using the scripts
 
 One you've set things up as listed above, all you should have to do it write. When you create a new document
-that you want captured in your daily word count, but sure to put the document in your Sandbox folder. This is
-where the script looks for documents and it is from here that it makes archival copies into the Earlier folder
-so that is can produce a difference file.
-
-When I have finished a draft, I usually move the document out of my SANDBOX and into some other folder. I purge
-the Earlier version as well. When I start a new draft, I create a new file and drop it in my Sandbox. Wash. Risne.
-Repeat.
+that you want captured in your daily word count, but sure to put the document in your writing folder. This is
+where the script looks for documents.
 
 The script should run each night between 11pm and midnight. This is Eastern Time. To change the script to
 your local time zone, search the code.gs for "EST" and made the proper substitution. I run the script at this time
@@ -134,11 +107,7 @@ because I am generally done for the day and I want the script to capture the day
 owls and want the script to run at other times. That's fine, but depending on when you run it, you might have to
 alter the date of the files the script looks for. Again, this was written with me and my habits in mind.
 
-<strong>CAUTION</strong>: You never want to edit the version of the file in the Sandbox/Earlier folder. These edits will be over-
-written each night. When you go to edit a file in your Sandbox, be sure you are editing the Sandbox version and 
-not the Sandbox/Earlier version. Changes to the latter will likely be overwritten by the script.
-
-I made my Sandbox folder a starred folder and have a shortcut to that folder that I use so that I don't
+I made my writing folder a starred folder and have a shortcut to that folder that I use so that I don't
 accidentally edit the earlier version of the file and lose my changes.
 
 <strong>Released under Creative Commons</strong>
