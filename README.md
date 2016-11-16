@@ -8,10 +8,10 @@ _**Authors Note** I designed this to be much simpler and give a little extra inf
 
 The Google Docs Writing Tracker Lite automates the process of logging how much you write each day. It does four main things:
 
-1. Gets a total word count for the day and logs the word count to a Google Spreadsheet.
-2. Gets total word count for whole project.
-3. Gets consecutive days written.
-4. Sends an email with the above information.
+# Gets a total word count for the day and logs the word count to a Google Spreadsheet.
+# Gets total word count for whole project.
+# Gets consecutive days written.
+# Sends an email with the above information.
 
 The result is a spreadsheet containing the raw numbers, how much you wrote each day, total word count, and consecutive writing days. Also you get a daily email showing with this information.
 
@@ -73,9 +73,7 @@ B. Google Doc Writing Tracker script setup:
   1. Create a new Script file called "WritingStats"
   2. When prompted for the type of project, select "Blank Project"
   3. Copy the code from "writing_stats.gs" (in GitHub) and paste it into the code.gs file.
-  4. Create a new script file (File->New->Script File) and call it diff.gs.
-  5. Copy the code from "diff.gs" (in GitHub) and paste it into the diff.gs file.
-  6. Go into the "code.gs" script. There are four values that must be updated:
+  4. Go into the "WritingStats.gs" script. There are four values that must be updated:
 
       var en_add = ""               -- replace with the email address you want the daily writing to be sent
 
@@ -87,7 +85,7 @@ You should have a Google App Script project now, with 1 script in it: code.gs.
 
 III. Configuring the Automation
 
-  1. In the script editor, select the code.gs file.
+  1. In the script editor, select the WritingStats.gs file.
   2. From the Resources menu, select "Current Project's Triggers"
   3. Click the "No triggers setup. Click here to add one" link.
   4. Under "Run" select the "getDailyWordCount()" function.
